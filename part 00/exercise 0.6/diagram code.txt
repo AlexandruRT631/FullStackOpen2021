@@ -1,0 +1,19 @@
+note over browser:
+user input is rendered on the page
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+user input is added to the list
+unlike the traditional way, 
+the server does not request a 
+URL redirect 
+end note
+
+note over browser:
+in the single page app version,
+the browser doesn't receive
+any data from the server when
+a new note is added
+end note
