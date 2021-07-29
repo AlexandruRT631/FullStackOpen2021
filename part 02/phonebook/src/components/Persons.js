@@ -9,7 +9,8 @@ const Persons = (props) => {
     return (
         <ul>
             {
-                props.persons.filter(person => person.name.toLowerCase().includes(props.newSearch.toLowerCase()) === true)
+                props.persons
+                    .filter(person => person.name.toLowerCase().includes(props.newSearch.toLowerCase()) === true)
                     .map(person => <Person key={person.name} person={person}/>)
             }
         </ul>
