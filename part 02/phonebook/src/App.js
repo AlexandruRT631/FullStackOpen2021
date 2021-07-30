@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/Person'
 
 const App = () => {
@@ -9,6 +10,8 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newSearch, setNewSearch] = useState('')
+    const [message, setMessage] = useState(null)
+    const [messageStyle, setMessageStyle] = useState('success')
 
     useEffect(() => {
         personService
@@ -33,12 +36,40 @@ const App = () => {
                 .then(addedPerson => {
                     setPersons(persons.concat(addedPerson))
                 })
+            setMessageStyle('success')
+            setMessage(
+                `Added ${newPerson.name}`
+            )
+            setTimeout(() => {
+                setMessage(null)
+            }, 5000)
         } else {
             if (window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
                 personService
                     .update(persons[indexPerson].id, newPerson)
                     .then(returnedPerson => {
                         setPersons(persons.map(person => person.id !== persons[indexPerson].id ? person : returnedPerson))
+                        setMessageStyle('success')
+                        setMessage(
+                            `${newPerson.name}'s number has been changed`
+                        )
+                        setTimeout(() => {
+                            setMessage(null)
+                        }, 5000)
+                    })
+                    .catch(() => {
+                        personService
+                            .getAll()
+                            .then(persons => {
+                                setPersons(persons)
+                            })
+                        setMessageStyle('error')
+                        setMessage(
+                            `Information of ${newPerson.name} has already been removed from server`
+                        )
+                        setTimeout(() => {
+                            setMessage(null)
+                        }, 8000)
                     })
             }
         }
@@ -59,11 +90,14 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={message} messageStyle={messageStyle}/>
             <Filter newSearch={newSearch} handleSearchChange={handleSearchChange}/>
             <h2>Add a new</h2>
-            <PersonForm newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} addPerson={addPerson}/>
+            <PersonForm newName={newName} handleNameChange={handleNameChange} newNumber={newNumber}
+                        handleNumberChange={handleNumberChange} addPerson={addPerson}/>
             <h2>Numbers</h2>
-            <Persons persons={persons} newSearch={newSearch} setPersons={setPersons}/>
+            <Persons persons={persons} newSearch={newSearch} setPersons={setPersons}
+                     setMessage={setMessage} setMessageStyle={setMessageStyle}/>
         </div>
     )
 }

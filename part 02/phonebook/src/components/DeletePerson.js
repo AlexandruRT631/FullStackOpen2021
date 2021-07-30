@@ -5,7 +5,13 @@ const DeletePerson = (props) => {
         personService
             .deletePerson(props.person.id)
             .then(() => {
-                console.log(`The person with id ${props.person.id} has been deleted`)
+                props.setMessageStyle('success')
+                props.setMessage(
+                    `Information of ${props.person.name} was removed`
+                )
+                setTimeout(() => {
+                    props.setMessage(null)
+                }, 5000)
                 personService
                     .getAll()
                     .then(persons => {

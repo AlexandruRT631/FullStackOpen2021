@@ -16,7 +16,8 @@ const Persons = (props) => {
             {
                 props.persons
                     .filter(person => person.name.toLowerCase().includes(props.newSearch.toLowerCase()) === true)
-                    .map(person => <Person key={person.name} person={person} setPersons={props.setPersons}/>)
+                    .map(person => <Person key={person.name} person={person} setPersons={props.setPersons}
+                                           setMessage={props.setMessage} setMessageStyle={props.setMessageStyle}/>)
             }
         </ul>
     )
