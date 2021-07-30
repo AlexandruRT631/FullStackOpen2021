@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/Person'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -11,10 +11,10 @@ const App = () => {
     const [newSearch, setNewSearch] = useState('')
 
     useEffect(() => {
-        axios
-            .get('http://localhost:3001/persons')
-            .then(response => {
-                setPersons(response.data)
+        personService
+            .getAll()
+            .then(initialPersons => {
+                setPersons(initialPersons)
             })
     }, [])
 
@@ -28,9 +28,19 @@ const App = () => {
         const indexPerson = persons.map(persons => persons.name.toLowerCase()).indexOf(newPerson.name.toLowerCase())
 
         if (indexPerson === -1) {
-            setPersons(persons.concat(newPerson))
+            personService
+                .create(newPerson)
+                .then(addedPerson => {
+                    setPersons(persons.concat(addedPerson))
+                })
         } else {
-            window.alert(`${newName} is already added to phonebook`)
+            if (window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
+                personService
+                    .update(persons[indexPerson].id, newPerson)
+                    .then(returnedPerson => {
+                        setPersons(persons.map(person => person.id !== persons[indexPerson].id ? person : returnedPerson))
+                    })
+            }
         }
         setNewName('')
         setNewNumber('')
@@ -53,7 +63,7 @@ const App = () => {
             <h2>Add a new</h2>
             <PersonForm newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} addPerson={addPerson}/>
             <h2>Numbers</h2>
-            <Persons persons={persons} newSearch={newSearch}/>
+            <Persons persons={persons} newSearch={newSearch} setPersons={setPersons}/>
         </div>
     )
 }

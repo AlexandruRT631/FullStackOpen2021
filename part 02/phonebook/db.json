@@ -19,6 +19,26 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": 4
+    },
+    {
+      "name": "Alex Radu-Todor",
+      "number": "123-456-7890",
+      "id": 5
+    },
+    {
+      "name": "Cosmin Patrunjel",
+      "number": "246-801-3579",
+      "id": 6
+    },
+    {
+      "name": "Cristi Junge",
+      "number": "420-169-8767",
+      "id": 7
+    },
+    {
+      "name": "Razvan Costescu",
+      "number": "111-222-3333",
+      "id": 8
     }
   ]
 }

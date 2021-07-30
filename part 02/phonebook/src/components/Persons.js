@@ -1,17 +1,22 @@
 import React from "react";
+import DeletePersons from './DeletePerson'
 
-const Person = ({person}) => {
+const Person = (props) => {
     return (
-        <li>{person.name} {person.number}</li>
+        <li>
+            {props.person.name} {props.person.number}
+            <button onClick={() => DeletePersons(props)}>delete</button>
+        </li>
     )
 }
+
 const Persons = (props) => {
     return (
         <ul>
             {
                 props.persons
                     .filter(person => person.name.toLowerCase().includes(props.newSearch.toLowerCase()) === true)
-                    .map(person => <Person key={person.name} person={person}/>)
+                    .map(person => <Person key={person.name} person={person} setPersons={props.setPersons}/>)
             }
         </ul>
     )
