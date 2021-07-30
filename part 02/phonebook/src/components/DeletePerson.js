@@ -15,7 +15,6 @@ const DeletePerson = (props) => {
                 personService
                     .getAll()
                     .then(persons => {
-                        console.log("List updated")
                         props.setPersons(persons)
                     })
             })
